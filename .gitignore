@@ -1,0 +1,14 @@
+# Pebble build output
+watch-app/build/
+watch-app/.pebble-linked-sdk
+
+# Android build output
+android/.gradle/
+android/app/build/
+android/local.properties
+android/*.iml
+android/.idea/
+
+# Misc
+*.DS_Store
+Thumbs.db

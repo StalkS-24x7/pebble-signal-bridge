@@ -1,0 +1,31 @@
+{
+  "name": "signal-bridge",
+  "author": "Signal Bridge Contributors",
+  "version": "1.0.0",
+  "keywords": ["signal", "messaging", "notifications"],
+  "pebble": {
+    "sdkVersion": "3",
+    "displayName": "Signal Bridge",
+    "uuid": "a8e3c7f2-1d4b-4e8a-9c3d-5f7b2e1a6c4d",
+    "targetPlatforms": ["emery"],
+    "watchapp": {
+      "watchface": false
+    },
+    "appKeys": {
+      "msg_type":    0,
+      "sender":      1,
+      "body":        2,
+      "conv_id":     3,
+      "has_image":   4,
+      "chunk_index": 5,
+      "chunk_total": 6,
+      "chunk_data":  7,
+      "img_width":   8,
+      "img_height":  9,
+      "reply_text":  10
+    },
+    "resources": {
+      "media": []
+    }
+  }
+}
