@@ -11,19 +11,19 @@
     "watchapp": {
       "watchface": false
     },
-    "appKeys": {
-      "msg_type":    0,
-      "sender":      1,
-      "body":        2,
-      "conv_id":     3,
-      "has_image":   4,
-      "chunk_index": 5,
-      "chunk_total": 6,
-      "chunk_data":  7,
-      "img_width":   8,
-      "img_height":  9,
-      "reply_text":  10
-    },
+    "messageKeys": [
+      "msg_type",
+      "sender",
+      "body",
+      "conv_id",
+      "has_image",
+      "chunk_index",
+      "chunk_total",
+      "chunk_data",
+      "img_width",
+      "img_height",
+      "reply_text"
+    ],
     "resources": {
       "media": []
     }

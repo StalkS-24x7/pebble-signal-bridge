@@ -33,7 +33,7 @@ typedef enum {
 #define BODY_LEN         512   // runtime body buffer
 #define PERSIST_BODY_LEN 128   // abbreviated body saved to flash
 #define CONV_ID_LEN      64
-#define IMG_SIDE         120   // 120×120 pixels
+#define IMG_SIDE         80    // 80×80 pixels (keeps static BSS under uint16 limit)
 #define CHUNK_BYTES      500
 #define INBOX_SIZE       2048
 #define OUTBOX_SIZE      512
@@ -233,57 +233,10 @@ static int b64_decode(const char *src, uint8_t *dst, int max_out) {
   return out;
 }
 
-// ============================================================
-// Timeline pins
-//
-// NOTE: Verify TimelineItemAttribute field names against your
-// installed SDK headers:
-//   ~/.pebble-sdk/SDKs/latest/sdk-core/pebble/emery/include/pebble.h
-// Field layout matches Pebble SDK 4.x / Rebble SDK 4.5.
-// ============================================================
-static char s_pin_title[SENDER_LEN];
-static char s_pin_body [128];
-static TimelineItemAttribute s_pin_attrs[2];
-
+// timeline_item_local_push is not exposed in the open Pebble SDK 4.3 headers.
+// Stubbed out — messages still arrive via AppMessage and vibrate normally.
 static void push_timeline_pin(const Thread *t, const TMsg *msg) {
-  // Derive a stable UUID from our app UUID prefix + timestamp + thread index
-  union { Uuid u; uint8_t b[16]; } uid;
-  const uint8_t prefix[12] = {
-    0xa8,0xe3,0xc7,0xf2, 0x1d,0x4b, 0x4e,0x8a, 0x9c,0x3d,0x5f,0x7b
-  };
-  memcpy(uid.b, prefix, 12);
-  uint32_t ts32 = (uint32_t)msg->timestamp;
-  memcpy(uid.b + 12, &ts32, 3);
-  uid.b[15] = (uint8_t)(t - s_threads);
-
-  strncpy(s_pin_title, t->sender,  sizeof(s_pin_title) - 1);
-  strncpy(s_pin_body,  msg->body,  sizeof(s_pin_body)  - 1);
-  s_pin_title[sizeof(s_pin_title)-1] = '\0';
-  s_pin_body [sizeof(s_pin_body) -1] = '\0';
-
-  s_pin_attrs[0] = (TimelineItemAttribute){
-    .id     = TIMELINE_ATTR_TITLE,
-    .length = (uint16_t)strlen(s_pin_title) + 1,
-    .cstring = s_pin_title,
-  };
-  s_pin_attrs[1] = (TimelineItemAttribute){
-    .id     = TIMELINE_ATTR_BODY,
-    .length = (uint16_t)strlen(s_pin_body) + 1,
-    .cstring = s_pin_body,
-  };
-
-  TimelineItem pin = {
-    .uuid           = uid.u,
-    .timestamp      = msg->timestamp,
-    .type           = TimelineItemTypeNotification,
-    .layout         = LayoutIdGenericNotification,
-    .num_attributes = 2,
-    .attributes     = s_pin_attrs,
-    .num_actions    = 0,
-    .actions        = NULL,
-  };
-
-  timeline_item_local_push(&pin, NULL);
+  (void)t; (void)msg;
 }
 
 // ============================================================
